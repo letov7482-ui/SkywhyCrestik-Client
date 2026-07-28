@@ -2,6 +2,7 @@ package com.skywhy.module.modules;
 
 import com.skywhy.module.Module;
 import com.skywhy.anti.AntiBanSystem;
+import com.skywhy.utils.RotationUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
@@ -15,6 +16,9 @@ public class KillAura extends Module {
     private long lastAttack = 0;
     private float range = 4.2f;
     private float hitboxMultiplier = 0.3f;
+    private RotationUtils.RotationMode rotationMode = RotationUtils.RotationMode.SMOOTH;
+    private float rotationSpeed = 10f;
+    private boolean autoSwitchMode = true;
     private boolean silentRotate = true;
 
     public KillAura() { super("KillAura", Category.COMBAT); }
@@ -26,35 +30,56 @@ public class KillAura extends Module {
         if (target == null) return;
 
         long now = System.currentTimeMillis();
-        int delay = 80 + random.nextInt(40);
+        int delay = getDelay();
         if (now - lastAttack < delay + random.nextInt(30)) return;
 
         double expandedRange = range + hitboxMultiplier;
         if (target.distanceTo(mc.player) > expandedRange + 1.0) return;
 
+        // Ротация с выбором режима
         if (silentRotate) {
-            Vec3d targetPos = target.getPos().add(0, target.getHeight()/2, 0);
+            RotationUtils.rotateToEntity(target, rotationMode, rotationSpeed);
+        } else {
+            Vec3d targetPos = target.getPos().add(0, target.getHeight() / 2, 0);
             double dx = targetPos.x - mc.player.getX();
             double dz = targetPos.z - mc.player.getZ();
-            float yaw = (float)(Math.atan2(dz, dx) * 180 / Math.PI) - 90;
-            float pitch = (float)(-Math.atan2(targetPos.y - mc.player.getEyeY(),
-                Math.sqrt(dx*dx + dz*dz)) * 180 / Math.PI);
+            float yaw = (float) (Math.atan2(dz, dx) * 180 / Math.PI) - 90;
+            float pitch = (float) (-Math.atan2(targetPos.y - mc.player.getEyeY(),
+                Math.sqrt(dx * dx + dz * dz)) * 180 / Math.PI);
             mc.player.setYaw(yaw + AntiBanSystem.getRotationOffset());
             mc.player.setPitch(pitch + AntiBanSystem.getRotationOffset() * 0.5f);
         }
 
+        // Атака
         mc.interactionManager.attackEntity(mc.player, target);
         mc.player.swingHand(Hand.MAIN_HAND);
-        lastAttack = now + (long)(random.nextInt(20) - 10);
+        lastAttack = now + (long) (random.nextInt(20) - 10);
 
-        // Server detection auto-switch
-        if (mc.getCurrentServerEntry() != null) {
-            String server = mc.getCurrentServerEntry().address;
-            if (server.contains("funtime")) { range = 4.0f; hitboxMultiplier = 0.25f; }
-            else if (server.contains("spooky")) { range = 4.5f; hitboxMultiplier = 0.35f; }
-            else if (server.contains("crystal")) { range = 4.2f; hitboxMultiplier = 0.2f; }
-            else if (server.contains("anchor")) { range = 4.0f; hitboxMultiplier = 0.3f; }
+        // Авто-смена режима ротации по серверу
+        if (autoSwitchMode) {
+            String server = mc.getCurrentServerEntry() != null ?
+                mc.getCurrentServerEntry().address : "";
+            if (server.contains("funtime") || server.contains("spooky")) {
+                rotationMode = RotationUtils.RotationMode.RANDOM;
+                rotationSpeed = 15f;
+            } else if (server.contains("crystal") || server.contains("anchor")) {
+                rotationMode = RotationUtils.RotationMode.SMOOTH;
+                rotationSpeed = 8f;
+            } else {
+                rotationMode = RotationUtils.RotationMode.SMOOTH;
+                rotationSpeed = 10f;
+            }
         }
+    }
+
+    private int getDelay() {
+        String server = mc.getCurrentServerEntry() != null ?
+            mc.getCurrentServerEntry().address : "";
+        if (server.contains("funtime")) return 80 + random.nextInt(40);
+        if (server.contains("spooky")) return 100 + random.nextInt(50);
+        if (server.contains("crystal")) return 50 + random.nextInt(30);
+        if (server.contains("anchor")) return 60 + random.nextInt(40);
+        return 80 + random.nextInt(30);
     }
 
     private Entity findTarget() {
@@ -67,4 +92,12 @@ public class KillAura extends Module {
             .toList();
         return targets.isEmpty() ? null : targets.get(0);
     }
-}
+
+    // Настройки
+    public void setRotationMode(RotationUtils.RotationMode mode) { this.rotationMode = mode; }
+    public void setRotationSpeed(float speed) { this.rotationSpeed = Math.max(speed, 1f); }
+    public void setRange(float range) { this.range = Math.min(range, 5.0f); }
+    public void setHitboxMultiplier(float val) { this.hitboxMultiplier = val; }
+    public void setSilentRotate(boolean val) { this.silentRotate = val; }
+    public void setAutoSwitchMode(boolean val) { this.autoSwitchMode = val; }
+    }
