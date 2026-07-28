@@ -3,7 +3,9 @@ package aether.hud;
 
 import aether.hud.elements.Coordinates;
 import aether.hud.elements.FPSCounter;
+import aether.hud.elements.ModuleList;
 import aether.hud.elements.Watermark;
+
 
 import net.minecraft.client.gui.DrawContext;
 
@@ -45,6 +47,11 @@ public final class HudManager {
 
         register(
                 new Coordinates()
+        );
+
+
+        register(
+                new ModuleList()
         );
 
     }
@@ -101,21 +108,22 @@ public final class HudManager {
     ) {
 
 
-
         for (HudElement element :
                 elements) {
 
 
+            if (!element.isEnabled()) {
 
-            if (element.isEnabled()) {
-
-
-                element.render(
-                        context,
-                        tickDelta
-                );
+                continue;
 
             }
+
+
+
+            element.render(
+                    context,
+                    tickDelta
+            );
 
         }
 
@@ -128,11 +136,15 @@ public final class HudManager {
     public void tick() {
 
 
-        // Здесь будут:
-        // анимации HUD
-        // обновление позиций
-        // эффекты
+        /*
+         Здесь позже будут:
 
+         - HUD анимации
+         - плавное появление элементов
+         - обновление ModuleList
+         - эффекты
+
+        */
 
     }
 
@@ -141,7 +153,6 @@ public final class HudManager {
 
 
     public List<HudElement> getElements() {
-
 
         return elements;
 
@@ -160,7 +171,6 @@ public final class HudManager {
                 elements) {
 
 
-
             if (element.getName()
                     .equalsIgnoreCase(name)) {
 
@@ -170,7 +180,6 @@ public final class HudManager {
             }
 
         }
-
 
 
         return null;
