@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 public final class EventBus {
 
 
@@ -19,17 +20,24 @@ public final class EventBus {
 
 
         if (listener == null) {
+
             return;
+
         }
+
 
 
         if (!listeners.contains(listener)) {
 
-            listeners.add(listener);
+            listeners.add(
+                    listener
+            );
 
         }
 
     }
+
+
 
 
 
@@ -38,9 +46,13 @@ public final class EventBus {
     ) {
 
 
-        listeners.remove(listener);
+        listeners.remove(
+                listener
+        );
 
     }
+
+
 
 
 
@@ -50,28 +62,26 @@ public final class EventBus {
 
 
         if (event == null) {
+
             return;
+
         }
 
 
 
-        for (Listener listener : listeners) {
+        for (Listener listener :
+                new ArrayList<>(listeners)) {
 
 
             listener.onEvent(
                     event
             );
 
-
-            if (event.isCancelled()) {
-
-                break;
-
-            }
-
         }
 
     }
+
+
 
 
 
@@ -80,5 +90,6 @@ public final class EventBus {
         return listeners;
 
     }
+
 
 }
