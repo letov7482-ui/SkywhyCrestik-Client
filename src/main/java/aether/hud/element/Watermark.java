@@ -3,12 +3,14 @@ package aether.hud.element;
 import aether.hud.HudElement;
 import aether.render.AetherTextRenderer;
 import aether.render.AnimationUtil;
-import aether.render.ColorUtil;
 import aether.render.RoundedRenderer;
 import aether.render.ShadowRenderer;
+import aether.theme.Theme;
+import aether.theme.ThemeManager;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+
 
 public final class Watermark extends HudElement {
 
@@ -17,7 +19,7 @@ public final class Watermark extends HudElement {
             MinecraftClient.getInstance();
 
 
-    private float animation = 0;
+    private float animation;
 
 
     public Watermark() {
@@ -38,11 +40,6 @@ public final class Watermark extends HudElement {
             DrawContext context
     ) {
 
-        if (mc.player == null) {
-            return;
-        }
-
-
         animation =
                 AnimationUtil.animate(
                         animation,
@@ -51,48 +48,18 @@ public final class Watermark extends HudElement {
                 );
 
 
-        float scale =
-                AnimationUtil.easeOut(
-                        animation
-                );
-
-
-        if (scale <= 0) {
+        if (animation <= 0) {
             return;
         }
 
 
-        int background =
-                ColorUtil.rgba(
-                        15,
-                        18,
-                        25,
-                        220
-                );
+        Theme theme =
+                ThemeManager.getCurrent();
 
 
-        int accent =
-                ColorUtil.rgb(
-                        80,
-                        150,
-                        255
-                );
-
-
-        int white =
-                ColorUtil.rgb(
-                        255,
-                        255,
-                        255
-                );
-
-
-        int gray =
-                ColorUtil.rgb(
-                        170,
-                        180,
-                        195
-                );
+        if (theme == null) {
+            return;
+        }
 
 
         ShadowRenderer.drawShadow(
@@ -112,7 +79,7 @@ public final class Watermark extends HudElement {
                 width,
                 height,
                 10,
-                background
+                theme.getBackground()
         );
 
 
@@ -123,7 +90,7 @@ public final class Watermark extends HudElement {
                 4,
                 height,
                 4,
-                accent
+                theme.getPrimary()
         );
 
 
@@ -132,7 +99,7 @@ public final class Watermark extends HudElement {
                 "Aether Visuals",
                 x + 14,
                 y + 9,
-                white
+                theme.getText()
         );
 
 
@@ -148,7 +115,7 @@ public final class Watermark extends HudElement {
                 info,
                 x + 14,
                 y + 27,
-                gray
+                theme.getSecondary()
         );
 
     }
