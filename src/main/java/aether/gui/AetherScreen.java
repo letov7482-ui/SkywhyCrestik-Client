@@ -2,8 +2,10 @@ package aether.gui;
 
 
 import aether.core.Managers;
+
 import aether.gui.components.CategoryPanel;
 import aether.gui.components.ModuleButton;
+import aether.gui.components.SettingPanel;
 
 import aether.module.Category;
 import aether.module.Module;
@@ -11,8 +13,10 @@ import aether.module.Module;
 import aether.render.AnimationUtil;
 import aether.render.RoundedRenderer;
 import aether.render.ShadowRenderer;
+
 import aether.theme.Theme;
 import aether.theme.ThemeManager;
+
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -27,13 +31,21 @@ import java.util.List;
 public final class AetherScreen extends Screen {
 
 
-
     private final List<CategoryPanel> categories =
             new ArrayList<>();
 
 
-    private final List<ModuleButton> modules =
+    private final List<ModuleButton> moduleButtons =
             new ArrayList<>();
+
+
+    private final SettingPanel settingPanel =
+            new SettingPanel(
+                    900,
+                    120,
+                    300,
+                    420
+            );
 
 
 
@@ -42,7 +54,11 @@ public final class AetherScreen extends Screen {
 
 
 
-    private float openAnimation;
+    private Module selectedModule;
+
+
+
+    private float animation;
 
 
 
@@ -65,25 +81,37 @@ public final class AetherScreen extends Screen {
         categories.clear();
 
 
-        float startY = 120;
+        float categoryY = 120;
+
 
 
         for (Category category :
                 Category.values()) {
 
 
-            categories.add(
+            CategoryPanel panel =
                     new CategoryPanel(
                             category,
                             60,
-                            startY,
-                            140,
+                            categoryY,
+                            150,
                             42
-                    )
+                    );
+
+
+            if (category == selectedCategory) {
+
+                panel.setSelected(true);
+
+            }
+
+
+            categories.add(
+                    panel
             );
 
 
-            startY += 50;
+            categoryY += 55;
 
         }
 
@@ -94,10 +122,11 @@ public final class AetherScreen extends Screen {
 
 
 
+
     private void rebuildModules() {
 
 
-        modules.clear();
+        moduleButtons.clear();
 
 
         if (Managers.MODULE == null) {
@@ -117,10 +146,10 @@ public final class AetherScreen extends Screen {
                         )) {
 
 
-            modules.add(
+            moduleButtons.add(
                     new ModuleButton(
                             module,
-                            250,
+                            260,
                             y,
                             300,
                             55
@@ -128,7 +157,7 @@ public final class AetherScreen extends Screen {
             );
 
 
-            y += 65;
+            y += 70;
 
         }
 
@@ -146,9 +175,9 @@ public final class AetherScreen extends Screen {
     ) {
 
 
-        openAnimation =
+        animation =
                 AnimationUtil.animate(
-                        openAnimation,
+                        animation,
                         1f,
                         0.1f
                 );
@@ -172,26 +201,24 @@ public final class AetherScreen extends Screen {
 
 
 
-        float panelWidth =
-                650;
+        float width = 1260;
 
-
-        float panelHeight =
-                420;
+        float height = 520;
 
 
 
         float x =
                 ResponsiveLayout.centerX(
-                        panelWidth,
-                        width
+                        width,
+                        this.width
                 );
+
 
 
         float y =
                 ResponsiveLayout.centerY(
-                        panelHeight,
-                        height
+                        height,
+                        this.height
                 );
 
 
@@ -200,8 +227,8 @@ public final class AetherScreen extends Screen {
                 context,
                 x,
                 y,
-                panelWidth,
-                panelHeight,
+                width,
+                height,
                 20
         );
 
@@ -211,9 +238,9 @@ public final class AetherScreen extends Screen {
                 context,
                 x,
                 y,
-                panelWidth,
-                panelHeight,
-                18,
+                width,
+                height,
+                20,
                 theme.getBackground()
         );
 
@@ -234,7 +261,7 @@ public final class AetherScreen extends Screen {
 
 
         for (ModuleButton button :
-                modules) {
+                moduleButtons) {
 
 
             button.render(
@@ -247,6 +274,14 @@ public final class AetherScreen extends Screen {
 
 
 
+        settingPanel.render(
+                context,
+                mouseX,
+                mouseY
+        );
+
+
+
         super.render(
                 context,
                 mouseX,
@@ -255,6 +290,8 @@ public final class AetherScreen extends Screen {
         );
 
     }
+
+
 
 
 
@@ -280,7 +317,20 @@ public final class AetherScreen extends Screen {
                         panel.getCategory();
 
 
+
+                selectedModule =
+                        null;
+
+
+
+                settingPanel.setModule(
+                        null
+                );
+
+
+
                 rebuildModules();
+
 
 
                 return true;
@@ -291,14 +341,25 @@ public final class AetherScreen extends Screen {
 
 
 
-        for (ModuleButton module :
-                modules) {
+        for (ModuleButton moduleButton :
+                moduleButtons) {
 
 
-            if (module.mouseClicked(
+            if (moduleButton.mouseClicked(
                     mouseX,
                     mouseY
             )) {
+
+
+                selectedModule =
+                        moduleButton.getModule();
+
+
+
+                settingPanel.setModule(
+                        selectedModule
+                );
+
 
 
                 return true;
@@ -326,4 +387,4 @@ public final class AetherScreen extends Screen {
 
     }
 
-            }
+                            }
