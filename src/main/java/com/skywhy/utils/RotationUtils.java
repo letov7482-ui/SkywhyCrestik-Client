@@ -106,4 +106,4 @@ public class RotationUtils {
         double dot = lookVec.dotProduct(toTarget);
         return dot > Math.cos(Math.toRadians(tolerance));
     }
-                  }
+                    }
