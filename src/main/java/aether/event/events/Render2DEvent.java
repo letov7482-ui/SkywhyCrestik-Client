@@ -3,6 +3,7 @@ package aether.event.events;
 
 import aether.event.Event;
 
+
 import net.minecraft.client.gui.DrawContext;
 
 
@@ -12,6 +13,7 @@ public final class Render2DEvent extends Event {
 
     private final DrawContext context;
 
+
     private final float tickDelta;
 
 
@@ -20,6 +22,7 @@ public final class Render2DEvent extends Event {
             DrawContext context,
             float tickDelta
     ) {
+
 
         this.context = context;
 
