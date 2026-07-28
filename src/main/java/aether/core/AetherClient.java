@@ -14,6 +14,8 @@ public final class AetherClient {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(NAME);
 
+    private boolean initialized;
+
     private AetherClient() {
     }
 
@@ -23,18 +25,22 @@ public final class AetherClient {
 
     public void initialize() {
 
-        LOGGER.info("==========================================");
-        LOGGER.info("{} is starting...", NAME);
+        if (initialized) {
+            return;
+        }
+
+        initialized = true;
+
+        LOGGER.info("======================================");
+        LOGGER.info("{} starting...", NAME);
         LOGGER.info("Version: {}", VERSION);
 
-        // Core
         Managers.initialize();
 
-        // Theme Engine
         ThemeManager.initialize();
 
-        LOGGER.info("{} successfully loaded!", NAME);
-        LOGGER.info("==========================================");
+        LOGGER.info("{} loaded successfully!", NAME);
+        LOGGER.info("======================================");
     }
 
     public static Logger getLogger() {
