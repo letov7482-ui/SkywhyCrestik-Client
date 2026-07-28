@@ -4,31 +4,29 @@
   "version": "1.0.0",
 
   "name": "Aether Visuals",
-
-  "description": "Modern visual client with smooth HUD, themes and customizable modules.",
-
+  "description": "A beautiful visual Minecraft client.",
   "authors": [
     "Aether Team"
   ],
+
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+
+  "license": "MIT",
 
   "environment": "client",
 
   "entrypoints": {
     "client": [
       "aether.AetherClient"
-    ],
-
-    "modmenu": [
-      "aether.gui.modmenu.AetherModMenu"
     ]
   },
 
   "depends": {
     "fabricloader": ">=0.15.11",
+    "fabric": "*",
     "minecraft": "1.21.4"
-  },
-
-  "suggests": {
-    "modmenu": "*"
   }
 }
