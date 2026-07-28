@@ -1,5 +1,6 @@
 package aether.hud;
 
+import aether.hud.element.Watermark;
 import net.minecraft.client.gui.DrawContext;
 
 import java.util.ArrayList;
@@ -12,10 +13,22 @@ public final class HudManager {
 
     public HudManager() {
 
+        initialize();
     }
 
 
-    public void register(HudElement element) {
+    private void initialize() {
+
+        register(
+                new Watermark()
+        );
+
+    }
+
+
+    public void register(
+            HudElement element
+    ) {
 
         if (element == null) {
             return;
@@ -25,20 +38,24 @@ public final class HudManager {
     }
 
 
-    public void unregister(HudElement element) {
+    public void unregister(
+            HudElement element
+    ) {
 
         elements.remove(element);
     }
 
 
-    public void render(DrawContext context) {
+    public void render(
+            DrawContext context
+    ) {
 
         for (HudElement element : elements) {
 
             if (element.isEnabled()) {
+
                 element.render(context);
             }
-
         }
     }
 
@@ -48,9 +65,9 @@ public final class HudManager {
         for (HudElement element : elements) {
 
             if (element.isEnabled()) {
+
                 element.tick();
             }
-
         }
     }
 
@@ -61,7 +78,9 @@ public final class HudManager {
     }
 
 
-    public HudElement getByName(String name) {
+    public HudElement getByName(
+            String name
+    ) {
 
         for (HudElement element : elements) {
 
