@@ -7,76 +7,59 @@ public final class ShadowRenderer {
     private ShadowRenderer() {
     }
 
-    /**
-     * Простая мягкая тень.
-     * Позже заменим на настоящий Blur/Bloom Shadow.
-     */
-    public static void draw(
+
+    public static void drawShadow(
             DrawContext context,
             float x,
             float y,
             float width,
-            float height
+            float height,
+            float radius
     ) {
 
-        int alpha1 = 35 << 24;
-        int alpha2 = 20 << 24;
-        int alpha3 = 10 << 24;
-
-        // Верх
-        context.fill(
-                (int) x - 1,
-                (int) y - 1,
-                (int) (x + width) + 1,
-                (int) y,
-                alpha2
+        drawShadow(
+                context,
+                x,
+                y,
+                width,
+                height,
+                radius,
+                60
         );
+    }
 
-        // Низ
-        context.fill(
-                (int) x - 1,
-                (int) (y + height),
-                (int) (x + width) + 1,
-                (int) (y + height) + 1,
-                alpha2
+
+    public static void drawShadow(
+            DrawContext context,
+            float x,
+            float y,
+            float width,
+            float height,
+            float radius,
+            int alpha
+    ) {
+
+        int shadowColor =
+                ColorUtil.rgba(
+                        0,
+                        0,
+                        0,
+                        alpha
+                );
+
+
+        float offset = 4;
+
+
+        RoundedRenderer.drawRoundedRect(
+                context,
+                x + offset,
+                y + offset,
+                width,
+                height,
+                radius,
+                shadowColor
         );
-
-        // Лево
-        context.fill(
-                (int) x - 1,
-                (int) y,
-                (int) x,
-                (int) (y + height),
-                alpha2
-        );
-
-        // Право
-        context.fill(
-                (int) (x + width),
-                (int) y,
-                (int) (x + width) + 1,
-                (int) (y + height),
-                alpha2
-        );
-
-        // Внешняя тень
-        context.fill(
-                (int) x - 2,
-                (int) y - 2,
-                (int) (x + width) + 2,
-                (int) (y + height) + 2,
-                alpha3
-        );
-
-        // Центральная лёгкая тень
-        context.fill(
-                (int) x,
-                (int) y,
-                (int) (x + width),
-                (int) (y + height),
-                alpha1
-        );
-
     }
 
 }
