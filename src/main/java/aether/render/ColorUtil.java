@@ -1,70 +1,158 @@
 package aether.render;
 
-import java.awt.Color;
-
 public final class ColorUtil {
 
     private ColorUtil() {
     }
 
-    public static Color alpha(Color color, int alpha) {
-        return new Color(
+
+    public static int rgba(
+            int red,
+            int green,
+            int blue,
+            int alpha
+    ) {
+
+        return ((alpha & 0xFF) << 24)
+                | ((red & 0xFF) << 16)
+                | ((green & 0xFF) << 8)
+                | (blue & 0xFF);
+    }
+
+
+    public static int rgb(
+            int red,
+            int green,
+            int blue
+    ) {
+
+        return rgba(
+                red,
+                green,
+                blue,
+                255
+        );
+    }
+
+
+    public static int setAlpha(
+            int color,
+            int alpha
+    ) {
+
+        return (color & 0x00FFFFFF)
+                | ((alpha & 0xFF) << 24);
+    }
+
+
+    public static int getRed(
+            int color
+    ) {
+
+        return (color >> 16) & 0xFF;
+    }
+
+
+    public static int getGreen(
+            int color
+    ) {
+
+        return (color >> 8) & 0xFF;
+    }
+
+
+    public static int getBlue(
+            int color
+    ) {
+
+        return color & 0xFF;
+    }
+
+
+    public static int getAlpha(
+            int color
+    ) {
+
+        return (color >> 24) & 0xFF;
+    }
+
+
+    public static int interpolate(
+            int start,
+            int end,
+            float progress
+    ) {
+
+        int r =
+                (int) (
+                        getRed(start)
+                        +
+                        (getRed(end) - getRed(start))
+                                * progress
+                );
+
+
+        int g =
+                (int) (
+                        getGreen(start)
+                        +
+                        (getGreen(end) - getGreen(start))
+                                * progress
+                );
+
+
+        int b =
+                (int) (
+                        getBlue(start)
+                        +
+                        (getBlue(end) - getBlue(start))
+                                * progress
+                );
+
+
+        int a =
+                (int) (
+                        getAlpha(start)
+                        +
+                        (getAlpha(end) - getAlpha(start))
+                                * progress
+                );
+
+
+        return rgba(
+                r,
+                g,
+                b,
+                a
+        );
+    }
+
+
+    public static int rainbow(
+            float speed,
+            float offset
+    ) {
+
+        float hue =
+                ((System.currentTimeMillis() * speed)
+                        + offset)
+                        % 360f / 360f;
+
+
+        java.awt.Color color =
+                java.awt.Color
+                        .getHSBColor(
+                                hue,
+                                0.8f,
+                                1f
+                        );
+
+
+        return rgb(
                 color.getRed(),
                 color.getGreen(),
-                color.getBlue(),
-                alpha
+                color.getBlue()
         );
-    }
-
-    public static Color darker(Color color, float factor) {
-
-        factor = Math.max(0.0F, Math.min(1.0F, factor));
-
-        return new Color(
-                Math.max((int) (color.getRed() * factor), 0),
-                Math.max((int) (color.getGreen() * factor), 0),
-                Math.max((int) (color.getBlue() * factor), 0),
-                color.getAlpha()
-        );
-    }
-
-    public static Color brighter(Color color, float factor) {
-
-        factor = Math.max(1.0F, factor);
-
-        return new Color(
-                Math.min((int) (color.getRed() * factor), 255),
-                Math.min((int) (color.getGreen() * factor), 255),
-                Math.min((int) (color.getBlue() * factor), 255),
-                color.getAlpha()
-        );
-    }
-
-    public static Color interpolate(Color first, Color second, float progress) {
-
-        progress = Math.max(0.0F, Math.min(1.0F, progress));
-
-        int red = (int) (first.getRed() + (second.getRed() - first.getRed()) * progress);
-        int green = (int) (first.getGreen() + (second.getGreen() - first.getGreen()) * progress);
-        int blue = (int) (first.getBlue() + (second.getBlue() - first.getBlue()) * progress);
-        int alpha = (int) (first.getAlpha() + (second.getAlpha() - first.getAlpha()) * progress);
-
-        return new Color(red, green, blue, alpha);
-    }
-
-    public static Color rainbow(long speed, int offset) {
-
-        double hue = ((System.currentTimeMillis() + offset) % speed) / (double) speed;
-
-        return Color.getHSBColor(
-                (float) hue,
-                0.9F,
-                1.0F
-        );
-    }
-
-    public static int rgb(Color color) {
-        return color.getRGB();
     }
 
 }
