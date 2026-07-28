@@ -13,12 +13,14 @@ base {
 repositories {
     mavenCentral()
     maven { url = "https://maven.fabricmc.net/" }
+    maven { url = "https://maven.terraformersmc.com/releases/" }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:1.21.4"
     mappings "net.fabricmc:yarn:1.21.4+build.3:v2"
     modImplementation "net.fabricmc:fabric-loader:0.15.11"
+    modImplementation "com.terraformersmc:modmenu:9.0.0"
 }
 
 tasks.withType(JavaCompile) {
