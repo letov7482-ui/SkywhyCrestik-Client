@@ -9,7 +9,7 @@ public class RotationUtils {
     private static final MinecraftClient mc = MinecraftClient.getInstance();
 
     public enum RotationMode {
-        INSTANT, SMOOTH, SILENT, 90_DEGREE, 180_DEGREE, 270_DEGREE, 360_DEGREE, RANDOM
+        INSTANT, SMOOTH, SILENT, DEGREE_90, DEGREE_180, DEGREE_270, DEGREE_360, RANDOM
     }
 
     public static void rotateToEntity(Entity target, RotationMode mode, float speed) {
@@ -50,29 +50,33 @@ public class RotationUtils {
                 );
                 break;
 
-            case 90_DEGREE:
+            case DEGREE_90: {
                 float yaw90 = roundToAngle(targetYaw, 90);
                 mc.player.setYaw(yaw90);
                 mc.player.setPitch(targetPitch);
                 break;
+            }
 
-            case 180_DEGREE:
+            case DEGREE_180: {
                 float yaw180 = roundToAngle(targetYaw, 180);
                 mc.player.setYaw(yaw180);
                 mc.player.setPitch(targetPitch);
                 break;
+            }
 
-            case 270_DEGREE:
+            case DEGREE_270: {
                 float yaw270 = roundToAngle(targetYaw, 270);
                 mc.player.setYaw(yaw270);
                 mc.player.setPitch(targetPitch);
                 break;
+            }
 
-            case 360_DEGREE:
+            case DEGREE_360: {
                 float yaw360 = roundToAngle(targetYaw, 360);
                 mc.player.setYaw(yaw360);
                 mc.player.setPitch(targetPitch);
                 break;
+            }
 
             case RANDOM:
                 float randomYaw = targetYaw + (float) (Math.random() * 30 - 15);
@@ -106,4 +110,4 @@ public class RotationUtils {
         double dot = lookVec.dotProduct(toTarget);
         return dot > Math.cos(Math.toRadians(tolerance));
     }
-                    }
+}
