@@ -1,15 +1,15 @@
 package aether.module;
 
+import aether.module.visual.Fullbright;
+
 import java.util.ArrayList;
 import java.util.List;
-
 
 public final class ModuleManager {
 
 
     private final List<Module> modules =
             new ArrayList<>();
-
 
 
     public ModuleManager() {
@@ -19,20 +19,13 @@ public final class ModuleManager {
     }
 
 
-
     private void initialize() {
 
-        /*
-         Здесь будут регистрироваться модули:
-
-         register(new Fullbright());
-         register(new HudEditor());
-         register(new TargetESP());
-
-         */
+        register(
+                new Fullbright()
+        );
 
     }
-
 
 
     public void register(
@@ -49,6 +42,14 @@ public final class ModuleManager {
     }
 
 
+    public void unregister(
+            Module module
+    ) {
+
+        modules.remove(module);
+
+    }
+
 
     public List<Module> getModules() {
 
@@ -57,36 +58,28 @@ public final class ModuleManager {
     }
 
 
-
     public Module getByName(
             String name
     ) {
 
-
         for (Module module : modules) {
-
 
             if (module.getName()
                     .equalsIgnoreCase(name)) {
 
-
                 return module;
-
             }
 
         }
-
 
         return null;
 
     }
 
 
-
     public List<Module> getByCategory(
             Category category
     ) {
-
 
         List<Module> result =
                 new ArrayList<>();
@@ -94,10 +87,8 @@ public final class ModuleManager {
 
         for (Module module : modules) {
 
-
             if (module.getCategory()
                     == category) {
-
 
                 result.add(module);
 
@@ -111,17 +102,28 @@ public final class ModuleManager {
     }
 
 
-
     public void tick() {
-
 
         for (Module module : modules) {
 
+            if (module.isEnabled()) {
+
+                module.onTick();
+
+            }
+
+        }
+
+    }
+
+
+    public void disableAll() {
+
+        for (Module module : modules) {
 
             if (module.isEnabled()) {
 
-
-                module.onTick();
+                module.setEnabled(false);
 
             }
 
