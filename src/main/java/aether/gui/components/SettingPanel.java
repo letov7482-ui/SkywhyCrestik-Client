@@ -2,18 +2,24 @@ package aether.gui.components;
 
 
 import aether.module.Module;
+
 import aether.setting.BooleanSetting;
 import aether.setting.ModeSetting;
 import aether.setting.NumberSetting;
+import aether.setting.Setting;
 
-import aether.render.AetherTextRenderer;
 import aether.render.RoundedRenderer;
 import aether.render.ShadowRenderer;
+
 import aether.theme.Theme;
 import aether.theme.ThemeManager;
 
-
 import net.minecraft.client.gui.DrawContext;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 
 public final class SettingPanel {
@@ -27,6 +33,19 @@ public final class SettingPanel {
 
     private final float width;
     private final float height;
+
+
+
+    private final List<SettingButton> booleanSettings =
+            new ArrayList<>();
+
+
+    private final List<SliderSetting> numberSettings =
+            new ArrayList<>();
+
+
+    private final List<ModeSelector> modeSettings =
+            new ArrayList<>();
 
 
 
@@ -53,7 +72,87 @@ public final class SettingPanel {
 
         this.module = module;
 
+
+        booleanSettings.clear();
+        numberSettings.clear();
+        modeSettings.clear();
+
+
+
+        if (module == null) {
+            return;
+        }
+
+
+
+        float offset = 65;
+
+
+
+        for (Setting<?> setting :
+                module.getSettings()) {
+
+
+
+            if (setting instanceof BooleanSetting bool) {
+
+
+                booleanSettings.add(
+                        new SettingButton(
+                                bool,
+                                x + 20,
+                                y + offset,
+                                width - 40,
+                                40
+                        )
+                );
+
+
+            }
+
+
+
+            if (setting instanceof NumberSetting number) {
+
+
+                numberSettings.add(
+                        new SliderSetting(
+                                number,
+                                x + 20,
+                                y + offset,
+                                width - 80,
+                                45
+                        )
+                );
+
+
+            }
+
+
+
+            if (setting instanceof ModeSetting mode) {
+
+
+                modeSettings.add(
+                        new ModeSelector(
+                                mode,
+                                x + 20,
+                                y + offset,
+                                width - 40,
+                                40
+                        )
+                );
+
+            }
+
+
+
+            offset += 55;
+
+        }
+
     }
+
 
 
 
@@ -81,7 +180,7 @@ public final class SettingPanel {
                 y,
                 width,
                 height,
-                14
+                15
         );
 
 
@@ -92,7 +191,7 @@ public final class SettingPanel {
                 y,
                 width,
                 height,
-                14,
+                16,
                 theme.getBackground()
         );
 
@@ -100,87 +199,49 @@ public final class SettingPanel {
 
         if (module == null) {
 
-
-            AetherTextRenderer.draw(
-                    context,
-                    "Select module",
-                    x + 20,
-                    y + 20,
-                    theme.getSecondary()
-            );
-
-
             return;
 
         }
 
 
 
-        AetherTextRenderer.drawShadow(
-                context,
-                module.getName(),
-                x + 20,
-                y + 20,
-                theme.getText()
-        );
+        for (SettingButton button :
+                booleanSettings) {
+
+
+            button.render(
+                    context,
+                    mouseX,
+                    mouseY
+            );
+
+        }
 
 
 
-        float offset = 55;
+        for (SliderSetting slider :
+                numberSettings) {
+
+
+            slider.render(
+                    context,
+                    mouseX,
+                    mouseY
+            );
+
+        }
 
 
 
-        for (var setting :
-                module.getSettings()) {
+        for (ModeSelector mode :
+                modeSettings) {
 
 
-
-            if (setting instanceof BooleanSetting bool) {
-
-
-                drawBoolean(
-                        context,
-                        bool.getName(),
-                        bool.isEnabled(),
-                        offset,
-                        theme
-                );
-
-
-            }
-
-
-
-            if (setting instanceof NumberSetting number) {
-
-
-                drawNumber(
-                        context,
-                        number,
-                        offset,
-                        theme
-                );
-
-
-            }
-
-
-
-            if (setting instanceof ModeSetting mode) {
-
-
-                drawMode(
-                        context,
-                        mode,
-                        offset,
-                        theme
-                );
-
-            }
-
-
-
-            offset += 45;
+            mode.render(
+                    context,
+                    mouseX,
+                    mouseY
+            );
 
         }
 
@@ -189,112 +250,98 @@ public final class SettingPanel {
 
 
 
-    private void drawBoolean(
-            DrawContext context,
-            String name,
-            boolean enabled,
-            float offset,
-            Theme theme
+    public boolean mouseClicked(
+            double mouseX,
+            double mouseY
     ) {
 
 
-        String value =
-                enabled
-                        ?
-                        "ON"
-                        :
-                        "OFF";
+
+        for (SettingButton button :
+                booleanSettings) {
+
+
+            if (button.mouseClicked(
+                    mouseX,
+                    mouseY
+            )) {
+
+                return true;
+
+            }
+
+        }
 
 
 
-        AetherTextRenderer.draw(
-                context,
-                name,
-                x + 20,
-                y + offset,
-                theme.getText()
-        );
+        for (ModeSelector mode :
+                modeSettings) {
+
+
+            if (mode.mouseClicked(
+                    mouseX,
+                    mouseY
+            )) {
+
+                return true;
+
+            }
+
+        }
 
 
 
-        AetherTextRenderer.draw(
-                context,
-                value,
-                x + width - 60,
-                y + offset,
-                enabled
-                        ?
-                        theme.getPrimary()
-                        :
-                        theme.getSecondary()
-        );
+        for (SliderSetting slider :
+                numberSettings) {
+
+
+            slider.mouseClicked(
+                    mouseX,
+                    mouseY
+            );
+
+        }
+
+
+
+        return false;
 
     }
 
 
 
 
-
-    private void drawNumber(
-            DrawContext context,
-            NumberSetting setting,
-            float offset,
-            Theme theme
-    ) {
+    public void mouseReleased() {
 
 
-        AetherTextRenderer.draw(
-                context,
-                setting.getName(),
-                x + 20,
-                y + offset,
-                theme.getText()
-        );
+        for (SliderSetting slider :
+                numberSettings) {
 
 
+            slider.mouseReleased();
 
-        AetherTextRenderer.draw(
-                context,
-                String.valueOf(
-                        setting.getValue()
-                ),
-                x + width - 70,
-                y + offset,
-                theme.getSecondary()
-        );
+        }
 
     }
 
 
 
 
-
-    private void drawMode(
-            DrawContext context,
-            ModeSetting setting,
-            float offset,
-            Theme theme
+    public void mouseDragged(
+            double mouseX
     ) {
 
 
-        AetherTextRenderer.draw(
-                context,
-                setting.getName(),
-                x + 20,
-                y + offset,
-                theme.getText()
-        );
+        for (SliderSetting slider :
+                numberSettings) {
 
 
+            slider.mouseDragged(
+                    mouseX
+            );
 
-        AetherTextRenderer.draw(
-                context,
-                setting.getValue(),
-                x + width - 100,
-                y + offset,
-                theme.getPrimary()
-        );
+        }
 
     }
 
-  }
+                }
