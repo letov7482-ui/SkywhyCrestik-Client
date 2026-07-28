@@ -1,7 +1,8 @@
 package aether;
 
 
-import aether.core.AetherClient;
+import aether.render.AetherRender;
+
 
 import net.fabricmc.api.ClientModInitializer;
 
@@ -17,6 +18,10 @@ public final class AetherClient implements ClientModInitializer {
         aether.core.AetherClient
                 .getInstance()
                 .initialize();
+
+
+
+        AetherRender.initialize();
 
 
     }
