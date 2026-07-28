@@ -4,7 +4,10 @@ import com.skywhy.module.Module;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 
 public class Scaffold extends Module {
     public Scaffold() { super("Scaffold", Category.MOVEMENT); }
@@ -18,7 +21,13 @@ public class Scaffold extends Module {
                 ItemStack stack = mc.player.getInventory().getStack(i);
                 if (stack.getItem() instanceof BlockItem) {
                     mc.player.getInventory().selectedSlot = i;
-                    mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND);
+                    BlockHitResult hit = new BlockHitResult(
+                        new Vec3d(below.getX() + 0.5, below.getY(), below.getZ() + 0.5),
+                        Direction.UP,
+                        below,
+                        false
+                    );
+                    mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, hit);
                     break;
                 }
             }
