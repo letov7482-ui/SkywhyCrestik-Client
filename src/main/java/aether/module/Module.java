@@ -1,5 +1,10 @@
 package aether.module;
 
+import aether.setting.Setting;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public abstract class Module {
 
@@ -12,6 +17,10 @@ public abstract class Module {
     private boolean enabled;
 
 
+    private final List<Setting<?>> settings =
+            new ArrayList<>();
+
+
 
     public Module(
             String name,
@@ -19,6 +28,7 @@ public abstract class Module {
     ) {
 
         this.name = name;
+
         this.category = category;
 
     }
@@ -56,6 +66,31 @@ public abstract class Module {
             onDisable();
 
         }
+
+    }
+
+
+
+    protected void addSetting(
+            Setting<?> setting
+    ) {
+
+        if (setting == null) {
+            return;
+        }
+
+
+        settings.add(
+                setting
+        );
+
+    }
+
+
+
+    public List<Setting<?>> getSettings() {
+
+        return settings;
 
     }
 
