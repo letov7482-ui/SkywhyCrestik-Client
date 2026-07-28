@@ -1,14 +1,23 @@
 package aether.hud.element;
 
 import aether.hud.HudElement;
+import aether.render.AetherTextRenderer;
+import aether.render.AnimationUtil;
+import aether.render.ColorUtil;
+import aether.render.RoundedRenderer;
+import aether.render.ShadowRenderer;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 
 public final class Watermark extends HudElement {
 
-    private final MinecraftClient mc;
 
-    private final String title = "Aether Visuals";
+    private final MinecraftClient mc =
+            MinecraftClient.getInstance();
+
+
+    private float animation = 0;
 
 
     public Watermark() {
@@ -19,10 +28,8 @@ public final class Watermark extends HudElement {
                 10
         );
 
-        this.mc = MinecraftClient.getInstance();
-
-        this.width = 180;
-        this.height = 45;
+        width = 190;
+        height = 48;
     }
 
 
@@ -36,89 +43,128 @@ public final class Watermark extends HudElement {
         }
 
 
+        animation =
+                AnimationUtil.animate(
+                        animation,
+                        1,
+                        0.08f
+                );
+
+
+        float scale =
+                AnimationUtil.easeOut(
+                        animation
+                );
+
+
+        if (scale <= 0) {
+            return;
+        }
+
+
         int background =
-                0xCC12161E;
+                ColorUtil.rgba(
+                        15,
+                        18,
+                        25,
+                        220
+                );
 
 
         int accent =
-                0xFF488CFF;
+                ColorUtil.rgb(
+                        80,
+                        150,
+                        255
+                );
 
 
-        int text =
-                0xFFFFFFFF;
+        int white =
+                ColorUtil.rgb(
+                        255,
+                        255,
+                        255
+                );
 
 
-        int subText =
-                0xFFB0BAC8;
+        int gray =
+                ColorUtil.rgb(
+                        170,
+                        180,
+                        195
+                );
 
 
-        // Основной фон
+        ShadowRenderer.drawShadow(
+                context,
+                x,
+                y,
+                width,
+                height,
+                10
+        );
 
-        context.fill(
-                (int) x,
-                (int) y,
-                (int) (x + width),
-                (int) (y + height),
+
+        RoundedRenderer.drawRoundedRect(
+                context,
+                x,
+                y,
+                width,
+                height,
+                10,
                 background
         );
 
 
-        // Акцентная линия
-
-        context.fill(
-                (int) x,
-                (int) y,
-                (int) (x + width),
-                (int) (y + 2),
+        RoundedRenderer.drawRoundedRect(
+                context,
+                x,
+                y,
+                4,
+                height,
+                4,
                 accent
         );
 
 
+        AetherTextRenderer.drawShadow(
+                context,
+                "Aether Visuals",
+                x + 14,
+                y + 9,
+                white
+        );
+
+
         String info =
-                getFps()
-                + " FPS • "
+                getFPS()
+                + " FPS  •  "
                 + getPing()
                 + " ms";
 
 
-        context.drawText(
-                mc.textRenderer,
-                title,
-                (int) x + 12,
-                (int) y + 10,
-                text,
-                true
-        );
-
-
-        context.drawText(
-                mc.textRenderer,
+        AetherTextRenderer.draw(
+                context,
                 info,
-                (int) x + 12,
-                (int) y + 26,
-                subText,
-                false
+                x + 14,
+                y + 27,
+                gray
         );
 
     }
 
 
-    private int getFps() {
+    private int getFPS() {
 
-        return MinecraftClient
-                .getInstance()
-                .getCurrentFps();
+        return mc.getCurrentFps();
     }
 
 
     private int getPing() {
 
-        if (mc.getNetworkHandler() == null) {
-            return 0;
-        }
+        if (mc.player == null ||
+                mc.getNetworkHandler() == null) {
 
-
-        if (mc.player == null) {
             return 0;
         }
 
@@ -126,8 +172,7 @@ public final class Watermark extends HudElement {
         var entry =
                 mc.getNetworkHandler()
                         .getPlayerListEntry(
-                                mc.player
-                                        .getUuid()
+                                mc.player.getUuid()
                         );
 
 
