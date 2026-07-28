@@ -1,31 +1,84 @@
 package aether.event;
 
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+
 
 public final class EventBus {
 
-    private final List<Object> listeners = new CopyOnWriteArrayList<>();
 
-    public void register(Object listener) {
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
+    private final List<Listener> listeners =
+            new ArrayList<>();
+
+
+
+    public void register(
+            Listener listener
+    ) {
+
+
+        if (listener == null) {
+            return;
         }
+
+
+        if (!listeners.contains(listener)) {
+
+            listeners.add(listener);
+
+        }
+
     }
 
-    public void unregister(Object listener) {
+
+
+    public void unregister(
+            Listener listener
+    ) {
+
+
         listeners.remove(listener);
+
     }
 
-    public boolean isRegistered(Object listener) {
-        return listeners.contains(listener);
+
+
+    public void post(
+            Event event
+    ) {
+
+
+        if (event == null) {
+            return;
+        }
+
+
+
+        for (Listener listener : listeners) {
+
+
+            listener.onEvent(
+                    event
+            );
+
+
+            if (event.isCancelled()) {
+
+                break;
+
+            }
+
+        }
+
     }
 
-    public List<Object> getListeners() {
-        return List.copyOf(listeners);
+
+
+    public List<Listener> getListeners() {
+
+        return listeners;
+
     }
 
-    public void clear() {
-        listeners.clear();
-    }
 }
