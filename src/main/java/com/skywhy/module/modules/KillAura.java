@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Random;
 
 public class KillAura extends Module {
-    private Random random = new Random();
+    public Random random = new Random();
     private long lastAttack = 0;
     private float range = 4.2f;
     private float hitboxMultiplier = 0.3f;
-    private RotationUtils.RotationMode rotationMode = RotationUtils.RotationMode.SMOOTH;
-    private float rotationSpeed = 10f;
+    public RotationUtils.RotationMode rotationMode = RotationUtils.RotationMode.SMOOTH;
+    public float rotationSpeed = 10f;
     private boolean autoSwitchMode = true;
     private boolean silentRotate = true;
 
@@ -36,7 +36,6 @@ public class KillAura extends Module {
         double expandedRange = range + hitboxMultiplier;
         if (target.distanceTo(mc.player) > expandedRange + 1.0) return;
 
-        // Ротация с выбором режима
         if (silentRotate) {
             RotationUtils.rotateToEntity(target, rotationMode, rotationSpeed);
         } else {
@@ -50,12 +49,10 @@ public class KillAura extends Module {
             mc.player.setPitch(pitch + AntiBanSystem.getRotationOffset() * 0.5f);
         }
 
-        // Атака
         mc.interactionManager.attackEntity(mc.player, target);
         mc.player.swingHand(Hand.MAIN_HAND);
         lastAttack = now + (long) (random.nextInt(20) - 10);
 
-        // Авто-смена режима ротации по серверу
         if (autoSwitchMode) {
             String server = mc.getCurrentServerEntry() != null ?
                 mc.getCurrentServerEntry().address : "";
@@ -93,7 +90,6 @@ public class KillAura extends Module {
         return targets.isEmpty() ? null : targets.get(0);
     }
 
-    // Настройки
     public void setRotationMode(RotationUtils.RotationMode mode) { this.rotationMode = mode; }
     public void setRotationSpeed(float speed) { this.rotationSpeed = Math.max(speed, 1f); }
     public void setRange(float range) { this.range = Math.min(range, 5.0f); }
