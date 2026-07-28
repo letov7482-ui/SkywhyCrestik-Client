@@ -3,33 +3,69 @@ plugins {
     id 'maven-publish'
 }
 
+
 version = "1.0.0"
 group = "com.skywhy"
+
 
 base {
     archivesName = "skywhy-client"
 }
 
+
 repositories {
+
     mavenCentral()
-    maven { url = "https://maven.fabricmc.net/" }
-    maven { url = "https://maven.terraformersmc.com/releases/" }
+
+    maven {
+        url = "https://maven.fabricmc.net/"
+    }
+
+    maven {
+        url = "https://maven.terraformersmc.com/releases/"
+    }
+
 }
+
+
 
 dependencies {
+
     minecraft "com.mojang:minecraft:1.21.4"
+
     mappings "net.fabricmc:yarn:1.21.4+build.3:v2"
+
+
     modImplementation "net.fabricmc:fabric-loader:0.15.11"
+
+
+    // Fabric API (рендер, события, HUD и другие системы)
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.114.0+1.21.4"
+
+
+    // Mod Menu
     modImplementation "com.terraformersmc:modmenu:9.0.0"
+
 }
 
-tasks.withType(JavaCompile) {
+
+
+tasks.withType(JavaCompile).configureEach {
+
     options.encoding = "UTF-8"
+
     options.release = 21
+
 }
+
+
 
 jar {
+
     from("LICENSE") {
+
         rename { "${it}_${project.base.archivesName.get()}" }
+
     }
+
 }
