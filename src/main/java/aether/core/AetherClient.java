@@ -1,5 +1,6 @@
 package aether.core;
 
+import aether.theme.ThemeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,11 @@ public final class AetherClient {
         LOGGER.info("{} is starting...", NAME);
         LOGGER.info("Version: {}", VERSION);
 
+        // Core
         Managers.initialize();
+
+        // Theme Engine
+        ThemeManager.initialize();
 
         LOGGER.info("{} successfully loaded!", NAME);
         LOGGER.info("==========================================");
@@ -35,4 +40,5 @@ public final class AetherClient {
     public static Logger getLogger() {
         return LOGGER;
     }
+
 }
