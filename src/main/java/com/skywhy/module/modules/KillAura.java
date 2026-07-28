@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -81,12 +82,15 @@ public class KillAura extends Module {
 
     private Entity findTarget() {
         if (mc.world == null) return null;
-        List<Entity> targets = mc.world.getEntities()
-            .stream()
-            .filter(e -> e instanceof PlayerEntity && e != mc.player)
-            .filter(e -> e.distanceTo(mc.player) < range + hitboxMultiplier + 2.0)
-            .sorted(Comparator.comparingDouble(e -> e.distanceTo(mc.player)))
-            .toList();
+        List<Entity> targets = new ArrayList<>();
+        for (Entity e : mc.world.getEntities()) {
+            if (e instanceof PlayerEntity && e != mc.player) {
+                if (e.distanceTo(mc.player) < range + hitboxMultiplier + 2.0) {
+                    targets.add(e);
+                }
+            }
+        }
+        targets.sort(Comparator.comparingDouble(e -> e.distanceTo(mc.player)));
         return targets.isEmpty() ? null : targets.get(0);
     }
 
