@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "skywhy",
+  "version": "1.0.0",
+  "name": "SkyWhy Client",
+  "description": "Ultimate visual and combat client with bypasses",
+  "authors": ["SkyWhy"],
+  "environment": "client",
+  "entrypoints": {
+    "main": ["com.skywhy.client.SkyWhyClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": "~1.21.4",
+    "java": ">=21"
+  }
+}
