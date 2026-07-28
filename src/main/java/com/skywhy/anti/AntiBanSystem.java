@@ -23,7 +23,9 @@ public class AntiBanSystem {
             double ox = (random.nextDouble() - 0.5) * 0.001;
             double oz = (random.nextDouble() - 0.5) * 0.001;
             mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(
-                mc.player.getX() + ox, mc.player.getY(), mc.player.getZ() + oz, mc.player.isOnGround()));
+                mc.player.getX() + ox, mc.player.getY(), mc.player.getZ() + oz,
+                mc.player.isOnGround(), mc.player.isOnGround()  // 4-й и 5-й параметры
+            ));
             lastJitter = now;
         }
 
@@ -31,7 +33,9 @@ public class AntiBanSystem {
             float yawOff = (float)((random.nextDouble() - 0.5) * 2.0);
             float pitchOff = (float)((random.nextDouble() - 0.5) * 1.0);
             mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(
-                mc.player.getYaw() + yawOff, mc.player.getPitch() + pitchOff, mc.player.isOnGround()));
+                mc.player.getYaw() + yawOff, mc.player.getPitch() + pitchOff,
+                mc.player.isOnGround(), mc.player.isOnGround()
+            ));
             lastRotate = now;
         }
 
