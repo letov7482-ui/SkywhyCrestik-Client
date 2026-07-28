@@ -100,4 +100,4 @@ public class KillAura extends Module {
     public void setHitboxMultiplier(float val) { this.hitboxMultiplier = val; }
     public void setSilentRotate(boolean val) { this.silentRotate = val; }
     public void setAutoSwitchMode(boolean val) { this.autoSwitchMode = val; }
-    }
+}
