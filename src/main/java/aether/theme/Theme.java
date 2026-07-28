@@ -1,24 +1,21 @@
 package aether.theme;
 
-import java.awt.Color;
-
 public final class Theme {
 
     private final String name;
 
-    private final Color primary;
-    private final Color secondary;
-    private final Color background;
-    private final Color text;
-    private final Color subText;
+    private final int primary;
+    private final int secondary;
+    private final int background;
+    private final int text;
+
 
     public Theme(
             String name,
-            Color primary,
-            Color secondary,
-            Color background,
-            Color text,
-            Color subText
+            int primary,
+            int secondary,
+            int background,
+            int text
     ) {
 
         this.name = name;
@@ -26,34 +23,32 @@ public final class Theme {
         this.primary = primary;
         this.secondary = secondary;
         this.background = background;
-
         this.text = text;
-        this.subText = subText;
-
     }
+
 
     public String getName() {
         return name;
     }
 
-    public Color getPrimary() {
+
+    public int getPrimary() {
         return primary;
     }
 
-    public Color getSecondary() {
+
+    public int getSecondary() {
         return secondary;
     }
 
-    public Color getBackground() {
+
+    public int getBackground() {
         return background;
     }
 
-    public Color getText() {
-        return text;
-    }
 
-    public Color getSubText() {
-        return subText;
+    public int getText() {
+        return text;
     }
 
 }
