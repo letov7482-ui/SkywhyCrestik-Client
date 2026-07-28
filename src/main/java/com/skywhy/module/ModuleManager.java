@@ -7,10 +7,13 @@ import java.util.List;
 
 public class ModuleManager {
     private List<Module> modules = new ArrayList<>();
+    private KillAura killAura;
 
     public ModuleManager() {
+        killAura = new KillAura();
+
         // COMBAT
-        modules.add(new KillAura());
+        modules.add(killAura);
         modules.add(new Reach());
         modules.add(new Velocity());
         modules.add(new AutoClicker());
@@ -71,21 +74,14 @@ public class ModuleManager {
     }
 
     public List<Module> getModules() { return modules; }
+    public KillAura getKillAura() { return killAura; }
     public Module getModule(String name) {
         for (Module m : modules) if (m.getName().equalsIgnoreCase(name)) return m;
         return null;
-    }
-    public List<Module> getModulesByCategory(Module.Category cat) {
-        List<Module> list = new ArrayList<>();
-        for (Module m : modules) if (m.getCategory() == cat) list.add(m);
-        return list;
     }
     public void onTick() {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null) return;
         for (Module m : modules) if (m.isEnabled()) m.onTick();
     }
-    public void onRender() {
-        for (Module m : modules) if (m.isEnabled()) m.onRender();
-    }
-                    }
+}
