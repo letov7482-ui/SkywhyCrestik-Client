@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "aether",
+  "version": "${version}",
+
+  "name": "Aether Visuals",
+  "description": "Modern lightweight visual client for Fabric 1.21.4",
+  "authors": [
+    "Aether Team"
+  ],
+
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+
+  "license": "MIT",
+
+  "environment": "*",
+
+  "entrypoints": {
+    "client": [
+      "aether.AetherMod"
+    ]
+  },
+
+  "mixins": [
+    "aether.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": "1.21.4",
+    "java": ">=21"
+  }
+}
