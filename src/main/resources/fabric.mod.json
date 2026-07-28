@@ -1,36 +1,34 @@
 {
   "schemaVersion": 1,
   "id": "aether",
-  "version": "${version}",
+  "version": "1.0.0",
 
   "name": "Aether Visuals",
-  "description": "Modern lightweight visual client for Fabric 1.21.4",
+
+  "description": "Modern visual client with smooth HUD, themes and customizable modules.",
+
   "authors": [
     "Aether Team"
   ],
 
-  "contact": {
-    "homepage": "",
-    "sources": ""
-  },
-
-  "license": "MIT",
-
-  "environment": "*",
+  "environment": "client",
 
   "entrypoints": {
     "client": [
-      "aether.AetherMod"
+      "aether.AetherClient"
+    ],
+
+    "modmenu": [
+      "aether.gui.modmenu.AetherModMenu"
     ]
   },
 
-  "mixins": [
-    "aether.mixins.json"
-  ],
-
   "depends": {
     "fabricloader": ">=0.15.11",
-    "minecraft": "1.21.4",
-    "java": ">=21"
+    "minecraft": "1.21.4"
+  },
+
+  "suggests": {
+    "modmenu": "*"
   }
 }
