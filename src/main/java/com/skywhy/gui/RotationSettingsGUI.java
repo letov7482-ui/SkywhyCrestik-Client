@@ -44,10 +44,10 @@ public class RotationSettingsGUI extends Screen {
                     case 0 -> RotationUtils.RotationMode.INSTANT;
                     case 1 -> RotationUtils.RotationMode.SMOOTH;
                     case 2 -> RotationUtils.RotationMode.SILENT;
-                    case 3 -> RotationUtils.RotationMode.90_DEGREE;
-                    case 4 -> RotationUtils.RotationMode.180_DEGREE;
-                    case 5 -> RotationUtils.RotationMode.270_DEGREE;
-                    case 6 -> RotationUtils.RotationMode.360_DEGREE;
+                    case 3 -> RotationUtils.RotationMode.DEGREE_90;
+                    case 4 -> RotationUtils.RotationMode.DEGREE_180;
+                    case 5 -> RotationUtils.RotationMode.DEGREE_270;
+                    case 6 -> RotationUtils.RotationMode.DEGREE_360;
                     default -> RotationUtils.RotationMode.RANDOM;
                 };
                 killAura.setRotationMode(mode);
@@ -60,4 +60,4 @@ public class RotationSettingsGUI extends Screen {
 
     @Override
     public boolean shouldPause() { return false; }
-            }
+}
