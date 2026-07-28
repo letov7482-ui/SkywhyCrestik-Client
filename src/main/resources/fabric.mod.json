@@ -2,16 +2,26 @@
   "schemaVersion": 1,
   "id": "skywhy",
   "version": "1.0.0",
-  "name": "SkyWhy Client",
-  "description": "Ultimate visual and combat client with bypasses",
+  "name": "SkyWhy Crestik",
+  "description": "Ultimate client with bypasses for all servers",
   "authors": ["SkyWhy"],
   "environment": "client",
   "entrypoints": {
-    "main": ["com.skywhy.client.SkyWhyClient"]
+    "main": ["com.skywhy.client.SkyWhyClient"],
+    "modmenu": ["com.skywhy.config.ModMenuIntegration"]
   },
   "depends": {
     "fabricloader": ">=0.15.11",
     "minecraft": "~1.21.4",
-    "java": ">=21"
+    "java": ">=21",
+    "modmenu": ">=9.0.0"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/skywhy"
+      },
+      "badges": ["library"]
+    }
   }
 }
