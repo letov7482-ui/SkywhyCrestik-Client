@@ -17,7 +17,6 @@ import aether.render.ShadowRenderer;
 import aether.theme.Theme;
 import aether.theme.ThemeManager;
 
-
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -77,12 +76,10 @@ public final class AetherScreen extends Screen {
     @Override
     protected void init() {
 
-
         categories.clear();
 
 
         float categoryY = 120;
-
 
 
         for (Category category :
@@ -106,9 +103,7 @@ public final class AetherScreen extends Screen {
             }
 
 
-            categories.add(
-                    panel
-            );
+            categories.add(panel);
 
 
             categoryY += 55;
@@ -119,7 +114,6 @@ public final class AetherScreen extends Screen {
         rebuildModules();
 
     }
-
 
 
 
@@ -183,10 +177,7 @@ public final class AetherScreen extends Screen {
                 );
 
 
-
-        renderBackground(
-                context
-        );
+        renderBackground(context);
 
 
 
@@ -201,45 +192,12 @@ public final class AetherScreen extends Screen {
 
 
 
-        float width = 1260;
-
-        float height = 520;
-
-
-
-        float x =
-                ResponsiveLayout.centerX(
-                        width,
-                        this.width
-                );
-
-
-
-        float y =
-                ResponsiveLayout.centerY(
-                        height,
-                        this.height
-                );
-
-
-
-        ShadowRenderer.drawShadow(
-                context,
-                x,
-                y,
-                width,
-                height,
-                20
-        );
-
-
-
         RoundedRenderer.drawRoundedRect(
                 context,
-                x,
-                y,
-                width,
-                height,
+                40,
+                60,
+                1220,
+                560,
                 20,
                 theme.getBackground()
         );
@@ -294,7 +252,6 @@ public final class AetherScreen extends Screen {
 
 
 
-
     @Override
     public boolean mouseClicked(
             double mouseX,
@@ -318,9 +275,7 @@ public final class AetherScreen extends Screen {
 
 
 
-                selectedModule =
-                        null;
-
+                selectedModule = null;
 
 
                 settingPanel.setModule(
@@ -328,9 +283,7 @@ public final class AetherScreen extends Screen {
                 );
 
 
-
                 rebuildModules();
-
 
 
                 return true;
@@ -361,10 +314,20 @@ public final class AetherScreen extends Screen {
                 );
 
 
-
                 return true;
 
             }
+
+        }
+
+
+
+        if (settingPanel.mouseClicked(
+                mouseX,
+                mouseY
+        )) {
+
+            return true;
 
         }
 
@@ -380,6 +343,54 @@ public final class AetherScreen extends Screen {
 
 
 
+
+
+    @Override
+    public boolean mouseReleased(
+            double mouseX,
+            double mouseY,
+            int button
+    ) {
+
+
+        settingPanel.mouseReleased();
+
+
+        return super.mouseReleased(
+                mouseX,
+                mouseY,
+                button
+        );
+
+    }
+
+
+
+
+
+    @Override
+    public boolean mouseDragged(
+            double mouseX,
+            double mouseY,
+            int button,
+            double deltaX,
+            double deltaY
+    ) {
+
+
+        settingPanel.mouseDragged(
+                mouseX
+        );
+
+
+        return true;
+
+    }
+
+
+
+
+
     @Override
     public boolean shouldPause() {
 
@@ -387,4 +398,4 @@ public final class AetherScreen extends Screen {
 
     }
 
-                            }
+}
