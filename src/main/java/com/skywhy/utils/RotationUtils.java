@@ -45,7 +45,7 @@ public class RotationUtils {
             case SILENT:
                 mc.player.networkHandler.sendPacket(
                     new net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.LookAndOnGround(
-                        targetYaw, targetPitch, mc.player.isOnGround()
+                        targetYaw, targetPitch, mc.player.isOnGround(), mc.player.isOnGround()
                     )
                 );
                 break;
@@ -96,18 +96,4 @@ public class RotationUtils {
             return yaw - remainder;
         }
     }
-
-    public static float getAngleDifference(float yaw1, float yaw2) {
-        float diff = MathHelper.wrapDegrees(yaw2 - yaw1);
-        return Math.abs(diff);
-    }
-
-    public static boolean isLookingAtEntity(Entity entity, float tolerance) {
-        if (mc.player == null || entity == null) return false;
-        Vec3d targetPos = entity.getPos().add(0, entity.getHeight() / 2, 0);
-        Vec3d lookVec = mc.player.getRotationVector();
-        Vec3d toTarget = targetPos.subtract(mc.player.getEyePos()).normalize();
-        double dot = lookVec.dotProduct(toTarget);
-        return dot > Math.cos(Math.toRadians(tolerance));
-    }
-}
+                                                           }
